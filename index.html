@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>FEEDbucket</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Do not add `link` tags unless you know what you are doing -->
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- Do not add `script` tags unless you know what you are doing -->
+  <script src="public/vendor.js" type="text/javascript" charset="utf-8" defer></script>
+  <script src="public/application.js" type="text/javascript" charset="utf-8" defer></script>
+
+  <!-- turned mapinit file into a webpack.js file change required to deploy -->
+  <!-- it looks like we don't have direct access to the assets file when deployed so having a direct link wasn't working whereas requiring in webpack converts the file to something we can access (see line 12 in grunt/webpack.js) -->
+  <script src="public/maps.js" type="text/javascript" charset="utf-8" defer></script>
+  <!-- removed async - it was causing issues since google was faster than our other scripts-->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCucw-jItWsMEZaPSlzr3IolNaML9OtdC4&libraries=places&callback=initAutocomplete" defer>
+  </script>
+</head>
+
+<body class="container-fluid">
+  <header>
+
+    <div class="logo ">
+    <img src="https://raw.githubusercontent.com/Squad-SOL/bucket-browser/master/assets/bucketlogo.png" alt="FeedBucket Logo" class="logo-image">
+    </div>
+    <div class="button-holder" id="waiting-options">
+      <!-- SIGN IN-->
+      <div class="btn-group sign-in-dropdown">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sign In
+        </button>
+        <form class="dropdown-menu dropdown-menu-right" id="sign-in">
+          <fieldset>
+            <div class="input">
+              <label class="email">Username
+                <input class="email-sign-in" type="text" name="credentials[email]">
+              </label>
+            </div>
+            <div class="input">
+              <label class="password">Password
+                <input class="pass-sign-in" type="password" name="credentials[password]">
+              </label>
+            </div>
+            <p class="sign-in-message"></p>
+            <input class="close-dropdown" type="submit" name="submit" value="Sign in!">
+          </fieldset>
+        </form>
+      </div>
+      <!-- SIGN UP-->
+      <div class="btn-group sign-up-dropdown">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sign Up
+        </button>
+        <form class="dropdown-menu dropdown-menu-right" id="sign-up">
+          <fieldset>
+            <div class="input">
+              <label class="email">Username
+                <input class="email-sign-up"
+                type="text" name="credentials[email]">
+              </label>
+            </div>
+            <div class="input">
+              <label class="password">Password
+                <input class="password-sign-up" type="password" name="credentials[password]">
+              </label>
+            </div>
+            <div class="input">
+              <label class="password_confirmation">Password Confirmation
+                <input class="password-confirmation-sign-up" type="password" name="credentials[password_confirmation]">
+              </label>
+            </div>
+            <p class="sign-up-message"></p>
+            <input class="close-dropdown" type="submit" name="submit" value="Sign up!">
+          </fieldset>
+        </form>
+      </div>
+    </div>
+    <div class="button-holder hidden" id="logged-in-options">
+      <!-- CHANGE PASSWORD AND SIGN OUT-->
+      <div class="btn-group chg-pw-sign-out-dropdown">
+        <button type="button" class="btn btn-default dropdown-toggle logged-in-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        </button>
+        <form class="dropdown-menu dropdown-menu-right" id="change-password">
+          <fieldset>
+            <div class="input">
+              <label>Current Password
+                <input class="current-password-change" type="password" name="passwords[old]">
+              </label>
+            </div>
+            <div class="input">
+              <label>New Password
+                <input class="new-password-change" type="password" name="passwords[new]">
+              </label>
+            </div>
+            <p class="change-pw-message"></p>
+            <input class="close-dropdown change-password" type="submit" name="submit" value="Change Password!">
+          </fieldset>
+          <hr>
+          <p class="sign-out-message"></p>
+          <button class="btn btn-default sign-out-button" value="input" type="submit" name="submit" id="sign-out">Sign Out
+          </button>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <div class="landing-image">
+  </div>
+
+  <div class="restaurant-wrapper hidden">
+    <div class="how-to-image">
+    </div>
+    <div class="restaurant-form-holder">
+      <form id="create-restaurant">
+        <div class="restaurant-input-field get-from-map-button">
+          <button class="getDataFromMaps" name="Get from Map">Get from Map</button>
+        </div>
+        <div class="restaurant-form">
+          <div class="restaurant-input-field">
+            <label for="restaurant-name">Restaurant Name:</label>
+            <input class= "restaurants-input" id="restaurantName" type="text" name="restaurant[name]" placeholder="Mom's Place...">
+          </div>
+          <div class="restaurant-input-field">
+            <label for="restaurant-location">Location:</label>
+            <input class= "restaurants-input" id="restaurantAddress" type="text" name="restaurant[location]" placeholder="Home...">
+          </div>
+          <div class="restaurant-input-field">
+            <label for="restaurant-type">Type:</label>
+            <input class= "restaurants-input" type="text" name="restaurant[type]" placeholder="Southern...">
+          </div>
+        </div>
+        <div class="restaurant-form">
+          <div class="restaurant-input-field-notes">
+            <label for="restaurant-notes">Notes:</label>
+            <textarea class="form-control restaurants-input" name="restaurant[notes]" placeholder="Recommended by mom..." rows="4"></textarea>
+          </div>
+          <div class="restaurant-input-field">
+            <input class="create-button" type="submit" name="submit" value="Save to My List!">
+          </div>
+        </div>
+      </form>
+      <div class="save-restaurant-message-holder">
+        <p class="save-restaurant-message"></p>
+      </div>
+    </div>
+  </div>
+
+  <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+   <div class="map">
+     <div id="map">
+     </div>
+
+  <div class="restaurant-list-holder">
+    <div class="restaurant-list">
+    </div>
+  </div>
+
+  <div id="infowindow-content">
+    <span id="place-name"  class="title"></span><br>
+    <!-- <span id="place-id"></span><br> -->
+    <span id="place-address"></span>
+    <div id="rating"></div>
+    <div id="price-rating"></div>
+  </div>
+
+  <footer>&copy; 2017 Squad SOL - All Rights Reserved</footer>
+
+</body>
+
+</html>
